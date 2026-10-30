@@ -1,0 +1,63 @@
+{
+  "name": "ai-account-switcher-lite",
+  "displayName": "AI Account Switcher Lite",
+  "description": "%description%",
+  "version": "0.1.0",
+  "publisher": "lightweight",
+  "author": "lightweight",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "extensionKind": [
+    "ui"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "scripts": {
+    "build": "node .tools/.build/node_modules/typescript/bin/tsc -p .",
+    "test": "npm run build && node .tools/.test/check.cjs",
+    "vscode:prepublish": "npm run build",
+    "package": "node .tools/package.cjs"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "ai-account-switcher-lite.pick",
+        "title": "%command.pick%"
+      },
+      {
+        "command": "ai-account-switcher-lite.reload",
+        "title": "%command.reload%"
+      }
+    ],
+    "configuration": {
+      "title": "AI Account Switcher Lite",
+      "properties": {
+        "accountSwitcherLite.language": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "ko",
+            "en"
+          ],
+          "default": "auto",
+          "scope": "application",
+          "description": "%language%"
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "1.95.0",
+    "@vscode/vsce": "^3.0.0",
+    "typescript": "^5.9.3"
+  },
+  "languageSection": "accountSwitcherLite"
+}

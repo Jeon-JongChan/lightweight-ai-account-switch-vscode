@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "ES2022", "module": "commonjs", "strict": true,
+    "rootDir": "src", "outDir": "out", "removeComments": true,
+    "skipLibCheck": true, "noEmitOnError": true,
+    "typeRoots": [".tools/.build/node_modules/@types"]
+  },
+  "include": ["src/**/*.ts"]
+}

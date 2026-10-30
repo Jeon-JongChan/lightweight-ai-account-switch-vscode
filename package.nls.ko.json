@@ -1,0 +1,6 @@
+{
+  "description": "SecretStorage를 사용하는 초경량 로컬 계정 전환 확장입니다.",
+  "command.pick": "AI 계정 전환: 계정 전환 / 관리",
+  "command.reload": "AI 계정 전환: 창 다시 로드",
+  "language": "UI 언어: auto는 VS Code 언어, ko는 한국어, en은 영어입니다."
+}

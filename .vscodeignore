@@ -1,0 +1,7 @@
+**/*
+!out/**/*.js
+!package.json
+!package.nls*.json
+!README.md
+!LICENSE
+!NOTICE.md

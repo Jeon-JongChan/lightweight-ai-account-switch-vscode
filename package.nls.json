@@ -1,0 +1,6 @@
+{
+  "description": "Lightweight, local account switching with SecretStorage.",
+  "command.pick": "AI Accounts: Switch / Manage Accounts",
+  "command.reload": "AI Accounts: Reload Window",
+  "language": "UI language: auto follows VS Code; ko is Korean; en is English."
+}

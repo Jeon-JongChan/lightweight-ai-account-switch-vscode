@@ -1,0 +1,14 @@
+node_modules/
+.tools/.build/node_modules/
+out/
+dist/
+*.vsix
+.tools/.build/nodejs/
+.tools/.build/_state/
+.tools/.build/dependencies.sha256
+.tools/.build/kfake*/
+.tools/.test/runs/
+.tools/.test/previous-packages/
+.tools/.graphify/
+.tools/reference/
+debug.log
