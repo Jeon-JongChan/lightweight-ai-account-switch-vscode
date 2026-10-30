@@ -3,7 +3,7 @@
   "displayName": "AI Account Switcher Lite",
   "icon": "resources/icon.png",
   "description": "%description%",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "publisher": "lightweight",
   "author": "lightweight",
   "license": "MIT",
@@ -22,7 +22,7 @@
   ],
   "scripts": {
     "build": "node .tools/.build/node_modules/typescript/bin/tsc -p .",
-    "test": "npm run build && node .tools/.test/check.cjs",
+    "test": "npm run build && node .tools/.test/check.cjs && node .tools/.test/new-login.cjs",
     "vscode:prepublish": "npm run build",
     "package": "node .tools/package.cjs"
   },

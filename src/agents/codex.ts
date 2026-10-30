@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { homedir } from 'node:os';
 import { join, resolve } from 'node:path';
 import type { Agent } from '../accounts';
-import { readAuth, replaceAuth, SafeError } from '../auth-file';
+import { readAuth, replaceAuth, clearAuth, SafeError } from '../auth-file';
 
 /** 인증 JSON 전체를 유지하며 API 키 또는 사용자·워크스페이스 조합으로 식별한다. */
 export function parseAuth(raw: string): string {
@@ -42,6 +42,8 @@ const agent: Agent = {
   /** 보호 검사와 함께 현재 인증 파일을 읽는다. */
   read: () => readAuth(authPath),
   /** 같은 디렉터리의 rename으로 교체한다. */
-  replace: (raw, expected) => replaceAuth(authPath, raw, expected)
+  replace: (raw, expected) => replaceAuth(authPath, raw, expected),
+  /** 서버 토큰을 취소하지 않고 로컬 로그인 파일만 비운다. */
+  clear: expected => clearAuth(authPath, expected)
 };
 export default agent;

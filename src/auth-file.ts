@@ -65,6 +65,13 @@ export function replaceAuth(path: string, raw: string, expected: string | undefi
   }
 }
 
+/** 보존한 예상 인증과 일치할 때만 서버 로그아웃 없이 로컬 파일을 비운다. */
+export function clearAuth(path: string, expected: string): void {
+  if (readAuth(path) !== expected) throw new SafeError('changed');
+  // 로그아웃 API는 호출하지 않으며 SecretStorage 백업을 완료한 호출부에서만 사용한다.
+  fs.unlinkSync(path);
+}
+
 /** 여러 창의 변경 작업을 배타적으로 직렬화하고 타이머 없이 잠금을 해제한다. */
 export async function withFileLock<T>(path: string, action: () => Promise<T>): Promise<T> {
   fs.mkdirSync(dirname(path), { recursive: true, mode: 0o700 });

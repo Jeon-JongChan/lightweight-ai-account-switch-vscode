@@ -22,10 +22,14 @@ export interface Agent {
   importFile?: boolean;
   /** 지원하는 호스트만 허용할 필요가 있을 때 판별한다. */
   supportsHost?(appName: string): boolean;
+  /** 확장 종료 시 사용 중인 보조 프로세스를 정리한다. */
+  dispose?(): void;
   /** 에이전트 고유 저장소의 현재 인증을 읽는다. */
   read(): Promise<string | undefined> | string | undefined;
   /** 예상 원문과 일치할 때 인증을 원자적으로 교체한다. */
   replace(raw: string, expected: string | undefined): Promise<void> | void;
+  /** 서버 로그아웃 없이 예상값과 일치하는 로컬 인증만 비운다. */
+  clear?(expected: string): Promise<void> | void;
   /** 원문을 검증하고 토큰 갱신에도 유지되는 계정 식별자를 반환한다. */
   identify(raw: string): string;
 }
@@ -71,6 +75,11 @@ export class Accounts {
       }
       return data;
     } catch { throw new SafeError('invalidStore'); }
+  }
+
+  /** 저장소 변경 이벤트가 이 에이전트의 계정에 해당하는지 확인한다. */
+  ownsSecret(key: string): boolean {
+    return key === this.key;
   }
 
   /** 계정 ID와 원문이 그대로면 검증 결과를 재사용하고 원문이 바뀌면 다시 식별한다. */
@@ -126,6 +135,28 @@ export class Accounts {
     });
   }
 
+  /** 최신 인증을 암호화 보존한 뒤 로컬 인증을 비우고 새 로그인 창을 연다. */
+  async startLogin(openWindow: () => Promise<unknown>): Promise<void> {
+    const clear = this.agent.clear;
+    if (!clear) throw new SafeError('loginUnsupported');
+    await withFileLock(this.agent.authPath, async () => {
+      const accounts = await this.list();
+      const live = await this.agent.read();
+      if (live !== undefined) {
+        this.upsert(accounts, live);
+        // 암호화 저장 실패를 삼키면 복원 불가능하므로 인증 분리 전에 반드시 완료한다.
+        await this.save(accounts);
+        await clear.call(this.agent, live);
+      }
+      try { await openWindow(); }
+      catch (error) {
+        // 창 열기 실패 중 외부 로그인이 완료됐다면 그 인증은 덮어쓰지 않는다.
+        if (live !== undefined && await this.agent.read() === undefined) await this.agent.replace(live, undefined);
+        throw error;
+      }
+    });
+  }
+
   /** 최신 로그인부터 암호화 보존하고 성공한 경우에만 대상 계정으로 전환한다. */
   async switchTo(id: string): Promise<void> {
     await withFileLock(this.agent.authPath, async () => {
@@ -133,13 +164,20 @@ export class Accounts {
       const target = accounts.find(item => item.id === id);
       if (!target) throw new SafeError('missingAccount');
       const live = await this.agent.read();
-      // 이미 같은 인증이면 암호화 저장과 교체를 모두 생략한다.
-      if (live === target.raw) return;
-      // 외부에서 로그인한 미등록 계정도 자동 보존하여 원래 인증을 잃지 않게 한다.
-      if (live !== undefined) this.upsert(accounts, live);
-      await this.save(accounts);
-      // 같은 계정의 갱신 토큰이면 upsert가 target.raw를 live로 바꾸므로 교체를 생략한다.
-      if (live !== target.raw) await this.agent.replace(target.raw, live);
+      // 외부에서 로그인한 유효한 미등록 계정만 자동 보존하여 원래 인증을 잃지 않게 한다.
+      if (live !== undefined) {
+        let valid = false;
+        try {
+          this.agent.identify(live);
+          valid = true;
+        } catch { /* 로그아웃되었거나 유효하지 않은 활성 인증은 보존하지 않는다. */ }
+        if (valid) {
+          this.upsert(accounts, live);
+          await this.save(accounts);
+        }
+      }
+      // 메모리 세션이 끊겼을 수 있으므로 대상 인증으로 확실하게 교체한다.
+      await this.agent.replace(target.raw, live);
     });
   }
 
