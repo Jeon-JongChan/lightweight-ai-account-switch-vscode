@@ -1,6 +1,7 @@
 {
   "name": "ai-account-switcher-lite",
   "displayName": "AI Account Switcher Lite",
+  "icon": "resources/icon.png",
   "description": "%description%",
   "version": "0.1.0",
   "publisher": "lightweight",
