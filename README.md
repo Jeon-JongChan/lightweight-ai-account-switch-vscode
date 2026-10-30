@@ -2,11 +2,11 @@
 
 작성자·배포자: **lightweight** (`lightweight.ai-account-switcher-lite`). 이전 `local-codex-lite` 배포판과는 확장 ID가 다르므로, 기존 확장에 저장한 계정은 새 확장에서 다시 등록해야 합니다. 기존 계정 저장소는 자동 이전되지 않습니다.
 
-**VS Code 확장 하나에서 Codex와 Antigravity 계정을 관리합니다.** 설치 파일은 `ai-account-switcher-lite-0.1.0.vsix` 하나입니다. 에이전트별 인증 어댑터와 계정 저장소는 분리하며, 상태 표시줄·QuickPick만 사용합니다. npm 런타임 의존성은 0개입니다. 등록한 계정이 없는 에이전트는 초기화·메뉴 표시 때 인증 읽기와 OS 보조 프로세스 실행을 생략하며 상태 표시줄의 계정 없음은 저장한 계정이 없다는 뜻입니다.
+**VS Code 확장 하나에서 Codex와 Antigravity 계정을 관리합니다.** 설치 파일은 `ai-account-switcher-lite-0.1.1.vsix` 하나입니다. 에이전트별 인증 어댑터와 계정 저장소는 분리하며, 상태 표시줄·QuickPick만 사용합니다. npm 런타임 의존성은 0개입니다. 등록한 계정이 없는 에이전트는 초기화·메뉴 표시 때 인증 읽기와 OS 보조 프로세스 실행을 생략하며 상태 표시줄의 계정 없음은 저장한 계정이 없다는 뜻입니다.
 
 ## 설치와 사용
 
-1. VS Code의 `Extensions: Install from VSIX...`에서 `dist/ai-account-switcher-lite-0.1.0.vsix`를 설치합니다.
+1. VS Code의 `Extensions: Install from VSIX...`에서 `dist/ai-account-switcher-lite-0.1.1.vsix`를 설치합니다.
 2. Codex 또는 공식 Antigravity 확장의 기본 로그인 UI에서 로그인합니다.
 3. 해당 상태 표시줄 → **계정 추가** → **현재 계정 등록**을 선택하고 이름을 입력합니다.
 4. 다른 계정도 기본 UI로 로그인한 뒤 등록합니다. 새 로그인 전에 현재 계정을 먼저 등록하세요.
