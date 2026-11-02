@@ -12,3 +12,4 @@ dist/
 .tools/.graphify/
 .tools/reference/
 debug.log
+.docs
